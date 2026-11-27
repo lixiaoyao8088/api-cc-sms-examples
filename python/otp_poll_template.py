@@ -8,6 +8,8 @@
 2. 严禁在标准输出或日志文件中打印完整手机号、明文验证码、原始短信全文或完整 Token。
 """
 
+from __future__ import annotations
+
 import argparse
 import json
 import os
@@ -16,6 +18,7 @@ import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
+from typing import Optional, Tuple
 
 
 def now_iso() -> str:
@@ -28,7 +31,7 @@ def mask_secret(value: str) -> str:
     return f"{value[:2]}***{value[-2:]}"
 
 
-def poll_once(endpoint: str, token: str, timeout_sec: int = 10) -> tuple[str, int | None, bool]:
+def poll_once(endpoint: str, token: str, timeout_sec: int = 10) -> Tuple[str, Optional[int], bool]:
     """
     发起单次只读查询，返回 (状态分类, HTTP状态码, 是否检测到脱敏记录)。
     请按当前正式文档替换鉴权头与响应判定逻辑。
